@@ -79,7 +79,7 @@ def pre_process_data(data, train=True):
 
     return data, departures
 
-def train_lr(data, lamb=0.0, label='Duration'):
+def train_lr(data, lamb=1.0, label='Duration'):
     """
     Trains the linear regression model.
     """
