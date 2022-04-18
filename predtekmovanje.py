@@ -39,11 +39,20 @@ def add_duration(data):
     data['Duration'] = data.apply(lambda x: lpputils.tsdiff(x['Arrival time'], x['Departure time']), axis=1)
     return data
 
+def add_time(data):
+    """
+    Adds departure time to the data (only time, no date).
+    """
+    data['DP hour'] = pd.to_datetime(data['Departure time']).dt.hour
+    data['DP min'] = pd.to_datetime(data['Departure time']).dt.minute
+    return data
+
 def pre_process_data(data, train=True):
     """
     Pre-processes the data.
     """
 
+    data = add_time(data)
     data = add_day_of_week(data)
     data = add_holiday_info(data)
 
@@ -64,9 +73,11 @@ def pre_process_data(data, train=True):
     departures = data['Departure time']
     data = data.drop('Departure time', axis=1)
 
+    # print(data)
+
     return data, departures
 
-def train_lr(data, lamb=0.5, label='Duration'):
+def train_lr(data, lamb=0.0, label='Duration'):
     """
     Trains the linear regression model.
     """
