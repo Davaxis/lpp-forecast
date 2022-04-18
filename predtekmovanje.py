@@ -39,12 +39,14 @@ def add_duration(data):
     data['Duration'] = data.apply(lambda x: lpputils.tsdiff(x['Arrival time'], x['Departure time']), axis=1)
     return data
 
-def add_time(data):
+def add_departure_info(data):
     """
-    Adds departure time to the data (only time, no date).
+    Adds structured departure time to the data.
     """
     data['DP hour'] = pd.to_datetime(data['Departure time']).dt.hour
     data['DP min'] = pd.to_datetime(data['Departure time']).dt.minute
+    data['DP day'] = pd.to_datetime(data['Departure time']).dt.day
+    data['DP month'] = pd.to_datetime(data['Departure time']).dt.month
     return data
 
 def pre_process_data(data, train=True):
@@ -52,7 +54,7 @@ def pre_process_data(data, train=True):
     Pre-processes the data.
     """
 
-    data = add_time(data)
+    data = add_departure_info(data)
     data = add_day_of_week(data)
     data = add_holiday_info(data)
 

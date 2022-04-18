@@ -42,12 +42,14 @@ def add_duration(data):
     data['Duration'] = data.apply(lambda x: lpputils.tsdiff(x['Arrival time'], x['Departure time']), axis=1)
     return data
 
-def add_time(data):
+def add_structured_time(data):
     """
-    Adds departure time to the data (only time, no date).
+    Adds structured departure time to the data.
     """
     data['DP hour'] = pd.to_datetime(data['Departure time']).dt.hour
     data['DP min'] = pd.to_datetime(data['Departure time']).dt.minute
+    data['DP day'] = pd.to_datetime(data['Departure time']).dt.day
+    data['DP month'] = pd.to_datetime(data['Departure time']).dt.month
     return data
 
 def get_direction_from_row(row):
@@ -93,7 +95,7 @@ def pre_process_data(data, train=True):
     data = add_holiday_info(data)
     # data = add_route(data)
     data = add_direction(data)
-    data = add_time(data)
+    data = add_structured_time(data)
 
     # not really needed since they are the same everywhere
     data = data.drop('Route description', axis=1)
